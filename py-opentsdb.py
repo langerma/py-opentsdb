@@ -140,7 +140,7 @@ class BaseClient(object):
     def queryUrl(self, **kwargs):
         return str("%s/api/query?%s" % (self.url, self.__urlEncodedParams(**kwargs)))
 
-    def __urlEncodedParams(self, aggr="sum", rate=False, end=None, **kwargs):
+    def __urlEncodedParams(self, aggr="sum", rate=False, counter=False, end=None, **kwargs):
 
         timeStr = "start=%s" % (kwargs["start"])
         if end != None:
@@ -148,6 +148,8 @@ class BaseClient(object):
 
         if rate:
             prefix = "%s:rate:%s" % (aggr, kwargs["metric"])
+        elif counter:
+            prefix = "%s:rate{counter,,1}:%s" % (aggr, kwargs["metric"])
         else:
             prefix = "%s:%s" % (aggr, kwargs["metric"])
 
